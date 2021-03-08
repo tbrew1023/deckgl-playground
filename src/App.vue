@@ -1,12 +1,14 @@
 <template>
   <div id="app">
-    <div :class="( navActive() ? 'nav-active' : 'nav-inactive' )" class="navigation">
-      <ul>
-        <li class="logo-container"><div @click="toggleNav()" class="nav-toggle" :class="( navActive() ? 'nav-btn-active' : 'nav-btn-inactive' )"></div><span class="logo"></span></li>
-        <router-link to="/"><li><span>Vancouver Blocks</span></li></router-link>
-        <router-link to="/hex"><li><span>Hex things</span></li></router-link>
-      </ul>
-      <button :class="( topVisible() ? 'active' : 'inactive' )" class="layer-toggle" @click="toggleTopLayer">Toggle Top Layer</button>
+    <div :class="( navActive() ? 'nav-container-active' : 'nav-container-inactive' )" class="navigation">
+      <div class="logo-container"><div @click="toggleNav()" class="nav-toggle" :class="( navActive() ? 'nav-btn-active' : 'nav-btn-inactive' )"></div><span class="logo"></span></div>
+      <div :class="( navActive() ? 'nav-active' : 'nav-inactive' )" class="nav-inner">
+        <ul>
+          <router-link to="/"><li><span>Vancouver Blocks</span></li></router-link>
+          <router-link to="/hex"><li><span>Hex things</span></li></router-link>
+        </ul>
+        <button :class="( topVisible() ? 'active' : 'inactive' )" class="layer-toggle" @click="toggleTopLayer">Toggle Top Layer</button>
+      </div>
     </div>
     <router-view/>
   </div>
@@ -19,10 +21,16 @@ export default {
   name: 'App',
   mounted() {
     document.getElementsByClassName('mapboxgl-ctrl-bottom-left')[0].style.left = '460px';
+    document.getElementsByClassName('mapboxgl-ctrl-bottom-left')[0].style.transition = '300ms';
   },
   methods: {
     toggleNav() {
       store.commit('toggleNav');
+      if(store.state.navActive) {
+        document.getElementsByClassName('mapboxgl-ctrl-bottom-left')[0].style.left = '460px';
+      } else {
+        document.getElementsByClassName('mapboxgl-ctrl-bottom-left')[0].style.left = '0px'; 
+      }
       //console.log(store.state.navActive);
     },
     toggleTopLayer() {
@@ -40,13 +48,16 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+body {
+  margin: 0px;
+  padding: 0px;
+}
+
 #app {
   font-family: Roboto, sans-serif;
 }
 
 .navigation {
-  background: #00000099;
-  backdrop-filter: saturate(180%) blur(20px);
   position: absolute;
   left: 0px;
   top: 0px;
@@ -60,12 +71,12 @@ export default {
 
   ul {
     list-style: none;
-    height: 100vh;
     display: flex;
     flex-direction: column;
     margin: 0px;
     padding: 0px;
     width: 100%;
+    height: calc(100vh - 170px);
 
     li {
       //margin: 24px 0px;
@@ -91,12 +102,12 @@ export default {
 
   button {
     margin: 24px;
-    height: 48px;
     border: none;
-    border-radius: 6px;
+    border-radius: 48px;
     font-weight: bold;
     transition: 200ms;
-    user-select: none;
+    outline: none;
+    padding: 12px 24px;
 
     &:hover {
       cursor: pointer;
@@ -138,11 +149,17 @@ export default {
 }
 
 .nav-active {
-  background: red !important; 
+  //background: red !important; 
+  width: 100% !important;
+  transition: 300ms;
 }
 
 .nav-inactive {
-  background: blue !important;
+  //background: blue !important;
+  transform: translateX(-60px);
+  opacity: 0;
+  transition: 300ms;
+  
 }
 
 .nav-toggle {
@@ -174,9 +191,36 @@ export default {
 
 .logo-container {
   cursor: default;
+  height: 48px;
+  border: none;
+  font-weight: bold;
+  transition: 200ms;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 12px 0px;
 
   &:hover {
     background: transparent !important;
   }
+
+  span {
+    margin-left: 24px;
+  }
+}
+
+.nav-container-active {
+  background: #00000099;
+  backdrop-filter: saturate(180%) blur(20px);
+  transition: 300ms;
+  width: 460px;
+}
+
+.nav-container-inactive {
+  background: #00000000;
+  backdrop-filter: saturate(0%) blur(0px);
+  transition: 300ms;
+  width: 230px;
 }
 </style>
