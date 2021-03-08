@@ -2,7 +2,7 @@
   <div id="app">
     <div class="navigation">
       <ul>
-        <li><router-link to="/vancouver">Vancouver Blocks</router-link></li>
+        <li><router-link to="/">Vancouver Blocks</router-link></li>
         <li><router-link to="/hex">Hex things</router-link></li>
         <button class="layer-toggle" @click="toggleTopLayer">Toggle Top Layer</button>
       </ul>
@@ -33,7 +33,7 @@ export default {
 }
 
 .navigation {
-  background: #00000066;
+  background: #00000099;
   backdrop-filter: saturate(180%) blur(20px);
   position: absolute;
   left: 0px;

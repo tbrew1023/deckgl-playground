@@ -1,6 +1,11 @@
 <template>
   <div id="app">
-    <div v-if="tooltip.active" :style="hoverPosition" class="toolip">
+    <div 
+      v-if="tooltip.active" 
+      :style="hoverPosition" 
+      class="toolip" 
+      :class="( tooltip.expanded ? 'tooltip-expanded' : 'tooltip-collapsed' )"
+    >
       Value per square mile: {{tooltip.body}}
     </div>
     <DeckGL 
@@ -36,6 +41,7 @@
         :getLineColor="[255, 255, 255]"
         :pickable="true"
         :onHover="deckTooltipCallback"
+        :onClick="handleTooltipClick"
       />
     </DeckGL>
   </div>
@@ -53,7 +59,8 @@ export default {
         x: 0,
         y: 0,
         body: 0,
-        active: false
+        active: false,
+        expanded: false
       },
       hasDeckLoaded: false,
       data_url: 'https://raw.githubusercontent.com/uber-common/deck.gl-data/master/examples/geojson/vancouver-blocks.json'
@@ -80,11 +87,17 @@ export default {
     }
   },
   methods: {
+    handleTooltipClick(e) {
+      console.log(e);
+      this.tooltip.expanded = true;
+      console.log(this.tooltip.expanded);
+    },
     deckTooltipCallback(e) {
       //console.log('hovering the thing', (e.object ? e : e ));
       this.tooltip.x = e.x;
       this.tooltip.y = e.y;
       this.tooltip.body = (e.object ? e.object.properties.valuePerSqm : 0 );
+      this.tooltip.expanded = false;
       if(e.picked) {
         this.tooltip.active = true;
       } else {
@@ -101,7 +114,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .fill-wrapper {
     position: absolute;
     top: 0;
@@ -133,5 +146,16 @@ export default {
   top: 150px;
   right: 0px;
   z-index: 999;
+}
+
+.tooltip-expanded {
+  //background: red !important;
+  height: 200px;
+  transition: height 300ms;
+}
+
+.tooltip-collapsed {
+  //background: blue !important;
+  transition: height 300ms;
 }
 </style>
