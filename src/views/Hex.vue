@@ -20,24 +20,24 @@
       @initialRender="handleDeckLoad()"
     >
         <Mapbox
-            class="fill-wrapper"
-            accessToken="pk.eyJ1IjoidHJlbnRicmV3IiwiYSI6ImNrbHliamhwNTA3cG8ydm1yZzN3MHI1NTIifQ.rOLxTdO6kJNGlYsQ_2IKaA"
-            container="test"
-            :center="[-122.466, 37.754]"
-            :zoom="12.5"
-            :bearing="10.125"
-            :pitch="53"
+          class="fill-wrapper"
+          accessToken="pk.eyJ1IjoidHJlbnRicmV3IiwiYSI6ImNrbHliamhwNTA3cG8ydm1yZzN3MHI1NTIifQ.rOLxTdO6kJNGlYsQ_2IKaA"
+          container="test"
+          :center="[-122.466, 37.754]"
+          :zoom="12.5"
+          :bearing="10.125"
+          :pitch="53"
         />
         <HexagonLayer
-            :id="'heatmap'"
-            :visible="topVisible"
-            :extruded="true"
-            :getPosition="d => d.COORDINATES"
-            :upperPercentile="120"
-            :radius="60"
-            :data="data_url"
-            :onHover="deckTooltipCallback"
-            :onClick="handleTooltipClick"
+          :id="'heatmap'"
+          :visible="topVisible"
+          :extruded="true"
+          :getPosition="d => d.COORDINATES"
+          :upperPercentile="120"
+          :radius="60"
+          :data="data_url"
+          :onHover="deckTooltipCallback"
+          :onClick="handleTooltipClick"
         />
     </DeckGL>
   </div>
@@ -89,15 +89,24 @@ export default {
   },
   computed: {
       topVisible() {
-          return store.state.topVisible;
+        return store.state.topVisible;
       },
       hoverPosition() {
         return {
-            'position': 'absolute',
-            'left': (this.tooltip.x + 12) + 'px',
-            'top': (this.tooltip.y + 12) + 'px'
+          'position': 'absolute',
+          'left': (this.tooltip.x + 12) + 'px',
+          'top': (this.tooltip.y + 12) + 'px'
         }
       },
+      deckLoaded() {
+        return store.state.deckLoaded;
+      }
+  },
+  created() {
+    this.data_url = DATA_URL
+  },
+  mounted() {
+
   },
   methods: {
     testSinglePick() {
@@ -115,8 +124,11 @@ export default {
       this.topVisible = !this.topVisible;
     },
     handleDeckLoad() {
-        console.log('DECK HAS LOADED! | hex');
-        this.hasDeckLoaded = true;
+      console.log('Deck loaded!');
+      this.hasDeckLoaded = true;
+      setTimeout(() => {
+          store.commit('deckLoaded');
+      }, 1000);
     },
     handleTooltipClick(e) {
       console.log(e);
@@ -136,15 +148,8 @@ export default {
       }
     },
     handleHover(e) {
-        console.log('hovering!', e);
+      console.log(e);
     }
-  },
-  created() {
-    this.data_url = DATA_URL
-  },
-  mounted() {
-      this.$forceUpdate;
-      console.log('force updating...');
   }
 };
 </script>
@@ -184,13 +189,11 @@ export default {
 }
 
 .tooltip-expanded {
-  //background: red !important;
   height: 200px;
   transition: height 300ms;
 }
 
 .tooltip-collapsed {
-  //background: blue !important;
   transition: height 300ms;
 }
 </style>

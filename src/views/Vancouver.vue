@@ -86,6 +86,9 @@ export default {
     },
     topVisible() {
       return store.state.topVisible;
+    },
+    deckLoaded() {
+      return store.state.deckLoaded;
     }
   },
   methods: {
@@ -113,7 +116,11 @@ export default {
       return scale;
     },
     handleDeckLoad() {
-      console.log('DECK HAS LOADED! | vancouver');
+      console.log('Deck loaded!');
+      this.hasDeckLoaded = true;
+      setTimeout(() => {
+        store.commit('deckLoaded');
+      }, 600);
     }
   }
 }
@@ -154,13 +161,11 @@ export default {
 }
 
 .tooltip-expanded {
-  //background: red !important;
   height: 200px;
   transition: height 300ms;
 }
 
 .tooltip-collapsed {
-  //background: blue !important;
   transition: height 300ms;
 }
 </style>

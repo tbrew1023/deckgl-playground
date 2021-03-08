@@ -1,13 +1,35 @@
 <template>
   <div id="app">
-    <div :class="( navActive() ? 'nav-container-active' : 'nav-container-inactive' )" class="navigation">
-      <div class="logo-container"><div @click="toggleNav()" class="nav-toggle" :class="( navActive() ? 'nav-btn-active' : 'nav-btn-inactive' )"></div><span class="logo"></span></div>
-      <div :class="( navActive() ? 'nav-active' : 'nav-inactive' )" class="nav-inner">
+    <div class="loader-container">
+      <div class="loader loader--style8" title="7">
+        <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+          width="24px" height="30px" viewBox="0 0 24 30" style="enable-background:new 0 0 50 50;" xml:space="preserve">
+          <rect x="0" y="10" width="4" height="10" fill="#333" opacity="0.2">
+            <animate attributeName="opacity" attributeType="XML" values="0.2; 1; .2" begin="0s" dur="0.6s" repeatCount="indefinite" />
+            <animate attributeName="height" attributeType="XML" values="10; 20; 10" begin="0s" dur="0.6s" repeatCount="indefinite" />
+            <animate attributeName="y" attributeType="XML" values="10; 5; 10" begin="0s" dur="0.6s" repeatCount="indefinite" />
+          </rect>
+          <rect x="8" y="10" width="4" height="10" fill="#333"  opacity="0.2">
+            <animate attributeName="opacity" attributeType="XML" values="0.2; 1; .2" begin="0.15s" dur="0.6s" repeatCount="indefinite" />
+            <animate attributeName="height" attributeType="XML" values="10; 20; 10" begin="0.15s" dur="0.6s" repeatCount="indefinite" />
+            <animate attributeName="y" attributeType="XML" values="10; 5; 10" begin="0.15s" dur="0.6s" repeatCount="indefinite" />
+          </rect>
+          <rect x="16" y="10" width="4" height="10" fill="#333"  opacity="0.2">
+            <animate attributeName="opacity" attributeType="XML" values="0.2; 1; .2" begin="0.3s" dur="0.6s" repeatCount="indefinite" />
+            <animate attributeName="height" attributeType="XML" values="10; 20; 10" begin="0.3s" dur="0.6s" repeatCount="indefinite" />
+            <animate attributeName="y" attributeType="XML" values="10; 5; 10" begin="0.3s" dur="0.6s" repeatCount="indefinite" />
+          </rect>
+        </svg>
+      </div>
+    </div>
+    <div :class="( navActive ? ( deckLoaded ? 'nav-container-active' : 'nav-load' ) : 'nav-container-inactive' )" class="navigation">
+      <div class="logo-container"><div @click="toggleNav()" class="nav-toggle" :class="( navActive ? 'nav-btn-active' : 'nav-btn-inactive' )"></div><span class="logo"></span></div>
+      <div :class="( navActive ? 'nav-active' : 'nav-inactive' )" class="nav-inner">
         <ul>
           <router-link to="/"><li><span>Vancouver Blocks</span></li></router-link>
-          <router-link to="/hex"><li><span>SF Bike Parking</span></li></router-link>
+          <router-link to="/bike-parking"><li><span>SF Bike Parking</span></li></router-link>
         </ul>
-        <button :class="( topVisible() ? 'active' : 'inactive' )" class="layer-toggle" @click="toggleTopLayer">Toggle Top Layer</button>
+        <button :class="( topVisible ? 'active' : 'inactive' )" class="layer-toggle" @click="toggleTopLayer">Toggle Top Layer</button>
       </div>
     </div>
     <router-view/>
@@ -19,6 +41,17 @@ import store from './store';
 
 export default {
   name: 'App',
+  computed: {
+    topVisible() {
+      return store.state.topVisible;
+    },
+    navActive() {
+      return store.state.navActive;
+    },
+    deckLoaded() {
+      return store.state.deckLoaded;
+    }
+  },
   mounted() {
     document.getElementsByClassName('mapboxgl-ctrl-bottom-left')[0].style.left = '460px';
     document.getElementsByClassName('mapboxgl-ctrl-bottom-left')[0].style.transition = '300ms';
@@ -31,17 +64,9 @@ export default {
       } else {
         document.getElementsByClassName('mapboxgl-ctrl-bottom-left')[0].style.left = '0px'; 
       }
-      //console.log(store.state.navActive);
     },
     toggleTopLayer() {
       store.commit('toggleTopLayer');
-      //console.log(this.topVisible());
-    },
-    topVisible() {
-      return store.state.topVisible;
-    },
-    navActive() {
-      return store.state.navActive;
     }
   }
 }
@@ -77,6 +102,7 @@ body {
     padding: 0px;
     width: 100%;
     height: calc(100vh - 170px);
+    transition: 200ms;
 
     a {
       width: 80%;
@@ -85,8 +111,6 @@ body {
       transition: 200ms;
 
       &:hover {
-        //background:#111111cc;
-
         span {
           margin-left: 43px;
         }
@@ -99,7 +123,6 @@ body {
     }
 
     li {
-      //margin: 24px 0px;
       height: 48px;
       border: none;
       font-weight: bold;
@@ -123,7 +146,6 @@ body {
     &:hover {
       cursor: pointer;
       transform: scale(0.97);
-      //background: #ffffff99;
     }
   }
 
@@ -160,14 +182,12 @@ body {
   margin-left: 24px !important;
 }
 
-.nav-active {
-  //background: red !important; 
+.nav-active { 
   width: 100% !important;
   transition: 300ms;
 }
 
 .nav-inactive {
-  //background: blue !important;
   transform: translateX(-60px);
   opacity: 0;
   transition: 300ms;
@@ -234,5 +254,34 @@ body {
   backdrop-filter: saturate(0%) blur(0px);
   transition: 300ms;
   width: 280px;
+}
+
+.nav-load {
+  transition: 300ms;
+  background: black !important;
+  width: 100% !important;
+
+  ul {
+    opacity: 0 !important;
+  }
+}
+
+.loader{
+  margin: 0 0 2em;
+  height: 100px;
+  width: 20%;
+  text-align: center;
+  padding: 1em;
+  margin: 0 auto 1em;
+  display: inline-block;
+  vertical-align: top;
+}
+
+/*
+  Set the color of the icon
+*/
+svg path,
+svg rect{
+  fill: #FF6700;
 }
 </style>

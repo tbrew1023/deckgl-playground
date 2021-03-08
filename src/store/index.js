@@ -6,7 +6,8 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     topVisible: true,
-    navActive: true
+    navActive: true,
+    deckLoaded: false
   },
   mutations: {
     toggleTopLayer(state) {
@@ -16,6 +17,12 @@ export default new Vuex.Store({
     toggleNav(state) {
       console.log('toggling nav', state.navActive);
       state.navActive = !state.navActive;
+    },
+    deckLoaded(state) {
+      state.deckLoaded = true;
+    },
+    deckNotLoaded(state) {
+      state.deckLoaded = false;
     }
   },
   actions: {
