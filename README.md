@@ -1,5 +1,3 @@
-# vue-test
-
 ## Live Demo
 
 https://deckgl-playground.web.app
