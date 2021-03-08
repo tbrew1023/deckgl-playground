@@ -1,7 +1,7 @@
 <template>
   <div class="hex">
     <div 
-      class="toolip" 
+      class="tooltip" 
       v-if="tooltip.active" 
       :style="hoverPosition" 
       :class="( tooltip.expanded ? 'tooltip-expanded' : 'tooltip-collapsed' )"
@@ -106,7 +106,10 @@ export default {
     this.data_url = DATA_URL
   },
   mounted() {
-
+    setTimeout(() => {
+      document.getElementsByClassName('mapboxgl-ctrl-bottom-left')[0].style.left = '460px';
+      document.getElementsByClassName('mapboxgl-ctrl-bottom-left')[0].style.transition = '300ms';
+    }, 1000);
   },
   methods: {
     testSinglePick() {
@@ -128,7 +131,7 @@ export default {
       this.hasDeckLoaded = true;
       setTimeout(() => {
           store.commit('deckLoaded');
-      }, 1000);
+      }, 2000);
     },
     handleTooltipClick(e) {
       console.log(e);
@@ -170,7 +173,7 @@ export default {
   height: 10%;
 }
 
-.toolip {
+.tooltip {
   background: #00000099;
   backdrop-filter: saturate(180%) blur(20px);
   width: 12%;

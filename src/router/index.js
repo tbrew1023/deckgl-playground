@@ -29,7 +29,7 @@ router.beforeEach((to, from, next) => {
   store.commit('deckNotLoaded');
   setTimeout(() => {
     next();
-  }, 1000);
+  }, 300);
 });
 
 export default router

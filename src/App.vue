@@ -32,8 +32,10 @@ export default {
     }
   },
   mounted() {
-    document.getElementsByClassName('mapboxgl-ctrl-bottom-left')[0].style.left = '460px';
-    document.getElementsByClassName('mapboxgl-ctrl-bottom-left')[0].style.transition = '300ms';
+    setTimeout(() => {
+      document.getElementsByClassName('mapboxgl-ctrl-bottom-left')[0].style.left = '460px';
+      document.getElementsByClassName('mapboxgl-ctrl-bottom-left')[0].style.transition = '300ms';
+    }, 1000);
   },
   methods: {
     toggleNav() {
@@ -238,6 +240,7 @@ body {
 .nav-load {
   transition: 300ms;
   background: black !important;
+  backdrop-filter: saturate(0%) blur(0px);
   width: 100% !important;
 
   ul {
@@ -266,35 +269,8 @@ body {
   -webkit-transform: translateZ(0);
   -ms-transform: translateZ(0);
   transform: translateZ(0);
-  //animation: enter-load 300ms ease forwards;
 }
-@-webkit-keyframes load4 {
-  0%,
-  100% {
-    box-shadow: 0 -3em 0 0.2em, 2em -2em 0 0em, 3em 0 0 -1em, 2em 2em 0 -1em, 0 3em 0 -1em, -2em 2em 0 -1em, -3em 0 0 -1em, -2em -2em 0 0;
-  }
-  12.5% {
-    box-shadow: 0 -3em 0 0, 2em -2em 0 0.2em, 3em 0 0 0, 2em 2em 0 -1em, 0 3em 0 -1em, -2em 2em 0 -1em, -3em 0 0 -1em, -2em -2em 0 -1em;
-  }
-  25% {
-    box-shadow: 0 -3em 0 -0.5em, 2em -2em 0 0, 3em 0 0 0.2em, 2em 2em 0 0, 0 3em 0 -1em, -2em 2em 0 -1em, -3em 0 0 -1em, -2em -2em 0 -1em;
-  }
-  37.5% {
-    box-shadow: 0 -3em 0 -1em, 2em -2em 0 -1em, 3em 0em 0 0, 2em 2em 0 0.2em, 0 3em 0 0em, -2em 2em 0 -1em, -3em 0em 0 -1em, -2em -2em 0 -1em;
-  }
-  50% {
-    box-shadow: 0 -3em 0 -1em, 2em -2em 0 -1em, 3em 0 0 -1em, 2em 2em 0 0em, 0 3em 0 0.2em, -2em 2em 0 0, -3em 0em 0 -1em, -2em -2em 0 -1em;
-  }
-  62.5% {
-    box-shadow: 0 -3em 0 -1em, 2em -2em 0 -1em, 3em 0 0 -1em, 2em 2em 0 -1em, 0 3em 0 0, -2em 2em 0 0.2em, -3em 0 0 0, -2em -2em 0 -1em;
-  }
-  75% {
-    box-shadow: 0em -3em 0 -1em, 2em -2em 0 -1em, 3em 0em 0 -1em, 2em 2em 0 -1em, 0 3em 0 -1em, -2em 2em 0 0, -3em 0em 0 0.2em, -2em -2em 0 0;
-  }
-  87.5% {
-    box-shadow: 0em -3em 0 0, 2em -2em 0 -1em, 3em 0 0 -1em, 2em 2em 0 -1em, 0 3em 0 -1em, -2em 2em 0 0, -3em 0em 0 0, -2em -2em 0 0.2em;
-  }
-}
+
 @keyframes load4 {
   0%,
   100% {
@@ -326,10 +302,8 @@ body {
 @keyframes enter-load {
   from {
     opacity: 0;
-    transform: scale(0.3) !important;
   } to {
     opacity: 1;
-    transform: scale(0.4) !important;
   }
 }
 </style>

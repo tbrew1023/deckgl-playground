@@ -1,12 +1,15 @@
 <template>
   <div id="app">
     <div 
-      class="toolip" 
+      class="tooltip" 
       v-if="tooltip.active" 
       :style="hoverPosition" 
-      :class="( tooltip.expanded ? 'tooltip-expanded' : 'tooltip-collapsed' )"
+      :class="( tooltip.expanded ? 'tooltip-container-expand' : 'tooltip-container-collapse' )"
     >
-      Value per square mile: {{tooltip.body}}
+      <span>Value per square mile: <strong>{{tooltip.body.sqm}}</strong></span>
+      <div :class="( tooltip.expanded ? 'tooltip-expanded' : 'tooltip-collapsed' )">
+        <span>Growth: <strong>{{tooltip.body.growth}}</strong></span>
+      </div>
     </div>
     <DeckGL 
       ref="deck"
@@ -60,7 +63,10 @@ export default {
       tooltip: {
         x: 0,
         y: 0,
-        body: 0,
+        body: {
+          sqm: 0,
+          growth: 0
+        },
         active: false,
         expanded: false
       },
@@ -75,6 +81,10 @@ export default {
   },
   mounted() {
     console.log('app mounted');
+    setTimeout(() => {
+      document.getElementsByClassName('mapboxgl-ctrl-bottom-left')[0].style.left = '460px';
+      document.getElementsByClassName('mapboxgl-ctrl-bottom-left')[0].style.transition = '300ms';
+    }, 1000);
   },
   computed: {
     hoverPosition() {
@@ -95,13 +105,13 @@ export default {
     handleTooltipClick(e) {
       console.log(e);
       this.tooltip.expanded = true;
-      console.log(this.tooltip.expanded);
     },
     deckTooltipCallback(e) {
       //console.log('hovering the thing', (e.object ? e : e ));
       this.tooltip.x = e.x;
       this.tooltip.y = e.y;
-      this.tooltip.body = (e.object ? e.object.properties.valuePerSqm : 0 );
+      this.tooltip.body.sqm = (e.object ? e.object.properties.valuePerSqm : 0 );
+      this.tooltip.body.growth = (e.object ? e.object.properties.growth : 0 );
       this.tooltip.expanded = false;
       if(e.picked) {
         this.tooltip.active = true;
@@ -116,11 +126,10 @@ export default {
       return scale;
     },
     handleDeckLoad() {
-      console.log('Deck loaded!');
       this.hasDeckLoaded = true;
       setTimeout(() => {
         store.commit('deckLoaded');
-      }, 600);
+      }, 2000);
     }
   }
 }
@@ -135,20 +144,19 @@ export default {
   height: 100vh;
 }
 
-.toolip {
+.tooltip {
   background: #00000099;
   backdrop-filter: saturate(180%) blur(20px);
-  width: 12%;
-  height: 2%;
+  width: 300px;
+  height: 1.8%;
   top: 0px;
   right: 0px;
   color: white;
   border-radius: 12px;
-  padding: 12px 24px;
+  padding: 12px 0px;
   position: absolute;
   z-index: 999;
   display: flex;
-  justify-content: center;
   align-items: center;
   flex-direction: column;
 }
@@ -161,11 +169,40 @@ export default {
 }
 
 .tooltip-expanded {
-  height: 200px;
+  height: 100px;
+  opacity: 1;
+  background: black;
   transition: height 300ms;
+  width: 300px;
+  margin-top: 12px;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  border-radius: 0px 0px 12px 12px;
+  text-align: center;
 }
 
 .tooltip-collapsed {
+  background: black;
+  height: 0px;
+  opacity: 0;
   transition: height 300ms;
+  width: 300px;
+  margin-top: 12px;
+}
+
+.tooltip-container-expand {
+  border-radius: 12px 12px 0px 0px;
+
+  span {
+    margin-left: 12px;
+  }
+}
+
+.tooltip-container-collapse {
+  border-radius: 12px;
+
+  span {
+    margin-left: 12px;
+  }
 }
 </style>
