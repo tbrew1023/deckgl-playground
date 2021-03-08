@@ -5,7 +5,7 @@
       <div :class="( navActive() ? 'nav-active' : 'nav-inactive' )" class="nav-inner">
         <ul>
           <router-link to="/"><li><span>Vancouver Blocks</span></li></router-link>
-          <router-link to="/hex"><li><span>Hex things</span></li></router-link>
+          <router-link to="/hex"><li><span>SF Bike Parking</span></li></router-link>
         </ul>
         <button :class="( topVisible() ? 'active' : 'inactive' )" class="layer-toggle" @click="toggleTopLayer">Toggle Top Layer</button>
       </div>
@@ -78,6 +78,26 @@ body {
     width: 100%;
     height: calc(100vh - 170px);
 
+    a {
+      width: 80%;
+      padding: 12px 0px;
+      border-radius: 0px 60px 60px 0px;
+      transition: 200ms;
+
+      &:hover {
+        //background:#111111cc;
+
+        span {
+          margin-left: 43px;
+        }
+      }
+
+      span {
+        margin-left: 36px;
+        transition: 200ms;
+      }
+    }
+
     li {
       //margin: 24px 0px;
       height: 48px;
@@ -87,16 +107,6 @@ body {
       user-select: none;
       display: flex;
       align-items: center;
-      width: 100%;
-      padding: 12px 0px;
-
-      &:hover {
-        background:#11111199;
-      }
-
-      span {
-        margin-left: 36px;
-      }
     }
   }
 
@@ -107,7 +117,8 @@ body {
     font-weight: bold;
     transition: 200ms;
     outline: none;
-    padding: 12px 24px;
+    padding: 18px 32px;
+    font-size: 14px;
 
     &:hover {
       cursor: pointer;
@@ -134,8 +145,9 @@ body {
   }
 }
 
-.router-link-active {
+.router-link-exact-active {
   background: #21212199;
+  transition: 300ms;
 }
 
 .logo {
@@ -221,6 +233,6 @@ body {
   background: #00000000;
   backdrop-filter: saturate(0%) blur(0px);
   transition: 300ms;
-  width: 230px;
+  width: 280px;
 }
 </style>

@@ -17,14 +17,16 @@
       :useDevicePixels="false"
       :width="'100%'"
       :height="'100%'"
+      @initialRender="handleDeckLoad()"
     >
       <Mapbox
         class="fill-wrapper"
         accessToken="pk.eyJ1IjoidHJlbnRicmV3IiwiYSI6ImNrbHliamhwNTA3cG8ydm1yZzN3MHI1NTIifQ.rOLxTdO6kJNGlYsQ_2IKaA"
         container="test"
-        :zoom="2"
-        :bearing="0"
         :center="[-123.13, 49.254]"
+        :zoom="11"
+        :bearing="0"
+        :pitch="45"
       />
       <GeoJsonLayer
         :data="data_url"
@@ -109,6 +111,9 @@ export default {
     },
     colorScale(scale) {
       return scale;
+    },
+    handleDeckLoad() {
+      console.log('DECK HAS LOADED! | vancouver');
     }
   }
 }
