@@ -1,9 +1,9 @@
 <template>
   <div id="app">
     <div 
+      class="toolip" 
       v-if="tooltip.active" 
       :style="hoverPosition" 
-      class="toolip" 
       :class="( tooltip.expanded ? 'tooltip-expanded' : 'tooltip-collapsed' )"
     >
       Value per square mile: {{tooltip.body}}
@@ -116,11 +116,11 @@ export default {
 
 <style scoped lang="scss">
 .fill-wrapper {
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 100%;
-    height: 100vh;
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 100vh;
 }
 
 .toolip {
