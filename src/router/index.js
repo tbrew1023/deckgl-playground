@@ -16,7 +16,8 @@ const routes = [
     path: '/bike-parking',
     name: 'Hex',
     component: Hex
-  }
+  },
+  
 ]
 
 const router = new VueRouter({

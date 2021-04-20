@@ -1,5 +1,9 @@
 <template>
   <div class="hex">
+    <div class="topbar">
+      <div class="search-wrapper"><input type="text" placeholder="Search" v-model="query"/><span @click="search"></span></div>
+      <button class="zoom-out" @click="goToNYC()">got to nyc</button>
+    </div>
     <div 
       class="tooltip" 
       v-if="tooltip.active" 
@@ -13,7 +17,7 @@
       class="fill-wrapper"
       :controlMap="true"
       :controller="true"
-      :viewState="{latitude: 37.754, longitude: -122.466, zoom: 12.5, maxZoom: 16, pitch: 53, bearing: 10.125}"
+      :viewState="{longitude: newCenter[0], latitude: newCenter[1], zoom: 12, maxZoom: 16, pitch: 53, bearing: 10.125}"
       :useDevicePixels="false"
       :width="'100%'"
       :height="'100%'"
@@ -21,10 +25,10 @@
     >
         <Mapbox
           class="fill-wrapper"
-          accessToken="pk.eyJ1IjoidHJlbnRicmV3IiwiYSI6ImNrbHliamhwNTA3cG8ydm1yZzN3MHI1NTIifQ.rOLxTdO6kJNGlYsQ_2IKaA"
+          :accessToken="mapboxToken"
           container="test"
-          :center="[-122.466, 37.754]"
-          :zoom="12.5"
+          :center="newCenter"
+          :zoom="12"
           :bearing="10.125"
           :pitch="53"
         />
@@ -45,10 +49,12 @@
 
 <script>
 import {DeckGL, Mapbox, HexagonLayer } from "@hirelofty/vue_deckgl";
+
 import { MAPBOX_SETTINGS, DECKGL_SETTINGS } from "../settings";
 import { colorScale } from "../utils";
 import { DATA_URL } from '../settings';
 import store from '../store';
+import axios from 'axios';
 
 const MAPBOX_TOKEN = 'pk.eyJ1IjoidHJlbnRicmV3IiwiYSI6ImNrbHliamhwNTA3cG8ydm1yZzN3MHI1NTIifQ.rOLxTdO6kJNGlYsQ_2IKaA';
 
@@ -61,7 +67,11 @@ export default {
   name: "Hex",
   data() {
     return {
-    tooltip: {
+      zoom: 12,
+      newCenter: [-122.466, 37.754], 
+      query: '',
+      mapbox_api: 'https://api.mapbox.com/geocoding/v5/mapbox.places',
+      tooltip: {
         x: 0,
         y: 0,
         body: 0,
@@ -112,6 +122,34 @@ export default {
     }, 1000);
   },
   methods: {
+    goToNYC() {
+      this.$refs.deck.moveMap({
+        viewState: {
+          longitude: -70.4,
+          latitude: 40.7,
+          zoom: 12,
+          bearing: 10.125,
+          pitch: 0
+        }
+      });
+      console.log('moving map');
+    },
+    search() {
+      console.log('searching for: ', this.query);
+      axios.get(`${this.mapbox_api}/${this.query}.json?access_token=${this.mapboxToken}`).then((result) => {
+        this.newCenter = result.data.features[0].center;
+        console.log(this.newCenter);
+        this.$refs.deck.moveMap({
+          viewState: {
+            longitude: this.newCenter[0],
+            latitude: this.newCenter[1],
+            zoom: 12,
+            bearing: 10.125,
+            pitch: 0
+          }
+        });
+      })
+    },
     testSinglePick() {
       console.log(this.$refs.deck.pickObject(100, 100, 0, null, false));
     },
@@ -159,6 +197,13 @@ export default {
 
 <style scoped lang="scss">
 
+.zoom-out {
+  position: absolute;
+  right: 24px;
+  top: 80px;
+  z-index: 999;
+}
+
 .fill-wrapper {
   position: absolute;
   top: 0;
@@ -198,5 +243,46 @@ export default {
 
 .tooltip-collapsed {
   transition: height 300ms;
+}
+.search-wrapper {
+  display: flex;
+  align-items: center;
+  position: absolute;
+  background: white;
+  //backdrop-filter: blur(24px);
+  right: 24px;
+  top: 24px;
+  width: 300px;
+  height: 40px;
+  border-radius: 36px;
+  z-index: 1;
+
+  span {
+    margin-right: 18px;
+    height: 24px;
+    width: 24px;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-image: url('../assets/search.svg');
+    cursor: pointer;
+    transition: 200ms;
+
+    &:hover {
+      opacity: 0.6;
+      transform: scale(0.9);
+    }
+  }
+
+  input {
+    background: transparent;
+    height: 100%;
+    width: 100%;
+    border-radius: inherit;
+    border: none;
+    padding-left: 18px;
+    box-sizing: border-box;
+    outline: none;
+  }
 }
 </style>

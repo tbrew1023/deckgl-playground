@@ -121,7 +121,7 @@ body {
     font-weight: bold;
     transition: 200ms;
     outline: none;
-    padding: 18px 32px;
+    padding: 12px 24px;
     font-size: 14px;
 
     &:hover {
@@ -131,15 +131,15 @@ body {
   }
 
   .active {
-    color: black;
-    background: white;
-    border: solid white 2px;
+    color: #00A8B5;
+    background: #00A8B521;
+    border: solid #00A8B500 2px;
   }
 
   .inactive {
     color: white;
-    background: transparent;
-    border: solid white 2px;
+    background: #00A8B5;
+    border: solid #00A8B5 2px;
   }
 
   a {
